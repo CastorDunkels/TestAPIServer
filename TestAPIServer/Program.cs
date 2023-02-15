@@ -4,22 +4,29 @@ WebApplication app = WebApplication.Create();
 app.Urls.Add("http://localhost:3000");
 app.Urls.Add("http://*:3000");
 
-Bengt bengt = new Bengt();
-bengt.Name = "Bengt Cresson";
-bengt.Level = 210;
-bengt.Alive = true;
+
+List<Bengt> dudes = new();
+dudes.Add(new(){Name="Bengt Cresson", Level=210, Alive=true});
+dudes.Add(new(){Name="Glupp Shitto", Level=10, Alive=true});
+dudes.Add(new(){Name="gfds", Level=353, Alive=true});
+
 
 app.MapGet("/", Answer);
 
 app.MapGet("/Bengt/", () => 
 {
-    return bengt;
+    return dudes;
+});
+app.MapGet("/Bengt/{num}", (int num) => 
+{
+    if (num >= 0 && num < dudes.Count){
+        return Results.Ok(dudes[num]);
+    }
+    return Results.NotFound();
+    
 });
 
-app.MapGet("/Glupp", () => 
-{
-    return "Glupp Shitto";
-});
+
 
 app.Run();
 
